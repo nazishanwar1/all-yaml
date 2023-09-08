@@ -1,0 +1,73 @@
+---
+- name: nfs server configuraton
+  hosts: all
+  tasks:
+    - name: install package
+      yum:
+        name: nfs-utils
+        state: latest
+    - name: start service
+      service:
+        name: nfs
+        state: started
+        enabled: yes
+    - name: adding port
+      firewalld: 
+        port: 2049/tcp
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: adding port
+      firewalld:
+        port: 2049/udp
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: adding port
+      firewalld:
+        port: 111/tcp
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: adding port
+      firewalld:
+        port: 111/udp
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: adding service
+      firewalld:
+        service: mountd
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: adding service
+      firewalld:
+        service: rpc-bind
+        permanent: yes
+        immediate: yes
+        state: enabled
+    - name: create a directory
+      file:
+        path: /nas1
+        state: directory
+    - name: create a directory
+      file:
+        path: /nas3
+        state: directory
+    - name: create a directory
+      file:
+        path: /nas4
+        state: directory
+    - name: add a line in file
+      lineinfile:
+        path: /etc/exports
+        line: '/nas1 192.168.100.101(rw,sync,no_root_squash)'
+    - name: add a line in file
+      lineinfile:
+        path: /etc/exports
+        line: '/nas3 192.168.100.103(rw,sync,no_root_squash)'
+    - name: add a line in file
+      lineinfile:
+        path: /etc/exports
+        line: '/nas4 192.168.100.104(rw,sync,no_root_squash)'
