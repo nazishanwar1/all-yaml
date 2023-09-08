@@ -1,0 +1,13 @@
+---
+- name: lvm extend
+  hosts: all
+  tasks:
+    - name: vg extend
+      lvg: 
+        vg: project23_vg
+        pvs: /dev/sdb,/dev/sdc
+    - name: lv extend
+      lvol:
+        vg: project23_vg
+        lv: project23_lv
+        size: +100%FREE

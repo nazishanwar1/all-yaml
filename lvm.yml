@@ -1,0 +1,28 @@
+---
+- name: lvm
+  hosts: all
+  tasks:
+    - name: vg create
+      lvg:
+        vg: project23_vg
+        pvs: /dev/sdb
+    - name: lv create
+      lvol:
+        vg: project23_vg
+        lv: project23_lv
+        size: 2G
+    - name: create filesystem
+      filesystem:
+        fstype: xfs
+        dev: /dev/project23_vg/project23_lv
+    - name: making directory
+      file: 
+        path: /project23
+        state: directory
+    - name: mounting directory
+      mount:
+        path: /project23
+        src: /dev/project23_vg/project23_lv
+        fstype: xfs
+        state: mounted
+
