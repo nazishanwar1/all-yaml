@@ -1,0 +1,21 @@
+---
+- name: Restrict SSH access to specific users
+  hosts: all
+  become: yes
+
+  vars:
+    allowed_users:
+      - ansible
+
+  tasks:
+    - name: Add AllowUsers line to sshd_config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?AllowUsers'
+        line: "AllowUsers {{ allowed_users | join(' ') }}"
+        backup: yes
+
+    - name: Restart SSH service
+      service:
+        name: sshd
+        state: restarted
