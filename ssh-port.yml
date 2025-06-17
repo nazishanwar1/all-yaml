@@ -4,7 +4,7 @@
   become: yes
 
   vars:
-    new_ssh_port: 22
+    new_ssh_port: 2222
 
   tasks:
     - name: Update sshd_config with new port
